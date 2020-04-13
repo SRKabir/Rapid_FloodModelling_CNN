@@ -26,13 +26,3 @@ Feature_Importance.py script is to rank inputs according to importance.
 
 SVR.py fits Support Vector Regression models to the validation locations.
 
-
-'Carlisle_InunMod.py' contains model functions and 'Depth_Simulations.py' can be used to follow the steps. Note, the training target (.h5) files are large and due to github file limitations couldn't be uploaded at a time. concatenate 'Y_Train_Subset1.h5' and 'Y_Train_Subset2.h5' to make it full. It is already done in 'Depth_Simulations.py'.
-
-Hyperparameter optimisation scripts are used to find model parameters
-
-Feature_Importance.py script is to rank inputs according to importance.
-
-SVR.py fits Support Vector Regression models to the validation locations.
-
-
