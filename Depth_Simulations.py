@@ -20,7 +20,13 @@ from Carlisle_InunMod import data_pre_process, CNN_Model_2lr, CNN_LSTM_Model, LS
 x_train = pd.read_csv('/home/cvssk/Carlisle/RapidCNN_Inun/Data/X_Train.csv', header=None)
 x_test = pd.read_csv('/home/cvssk/Carlisle/RapidCNN_Inun/Data/X_Test.csv', header=None)
 
-Y = pd.read_hdf('/home/cvssk/Carlisle/RapidCNN_Inun/Data/Y_Train.h5')
+Y1 = pd.read_hdf('/home/cvssk/Carlisle/RapidCNN_Inun/Data/Y_Train_Subset1.h5')
+Y2 = pd.read_hdf('/home/cvssk/Carlisle/RapidCNN_Inun/Data/Y_Train_Subset2.h5')
+
+dfs = [Y1,Y2]
+
+Y = pd.concat(dfs)
+
 Y_test = pd.read_hdf('/home/cvssk/Carlisle/RapidCNN_Inun/Data/Y_Test.h5')
 
 
