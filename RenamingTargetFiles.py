@@ -1,8 +1,8 @@
 #%%
 import os
 
-InDir = '/home/cvssk/Carlisle_Resubmission/2015Event/Junk/'
-OutDir= '/home/cvssk/Carlisle_Resubmission/2015Event/Target/'
+InDir = '/home/cvssk/Carlisle_Resubmission/2005Event/Junk/'
+OutDir= '/home/cvssk/Carlisle_Resubmission/2005Event/Target/'
 key = 'Run9-'
 files = []
 
@@ -23,7 +23,7 @@ for i in files:
 # %%
 import rasterio as rio 
 import matplotlib.pyplot as plt
-src = rio.open( '/home/cvssk/Carlisle_Resubmission/2015Event/Target/Run9-0045.wd')
+src = rio.open( '/home/cvssk/Carlisle_Resubmission/2005Event/Target/Run9-0048.wd')
 file = src.read(1)
 plt.imshow(file)
 plt.show()
