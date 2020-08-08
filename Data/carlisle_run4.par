@@ -1,0 +1,16 @@
+DEMfile                  Carlisle_5m.asc
+resroot                  Run4
+dirroot                  DEM5m_2D
+sim_time                 234000
+initial_tstep            2
+massint                  900.0
+saveint                  900.0
+fpfric                   0.055
+bdyfile                  carlisle_run4.bdy
+#stagefile                carlisle.stage
+bcifile                  carlisle.bci
+elevoff
+acceleration
+drycheckoff
+#hazard
+sgc_enable
