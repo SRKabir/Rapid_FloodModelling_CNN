@@ -1,4 +1,6 @@
 #%%
+#import libraries
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import pandas as pd
@@ -8,6 +10,8 @@ import os
 import rasterio as rio
 
 #%%
+#function for preparing the input feature and target matrices
+
 def data_pre_process():
 
     print('Running preprocessing script...')
@@ -15,12 +19,14 @@ def data_pre_process():
 
 
 
-    Target = '/home/cvssk/Carlisle_Resubmission/2005Event/Target/'
+    Target = '/home/cvssk/Carlisle_Resubmission/2005Event/Target/'  #directory of the LISFLOOD-FP outputs i.e. Run2 is the outputs of Hydrograph A scenario, and so on...
     inun_files2 = []
 
     ##PROCESS TARGET DATA (Y_PARAM)
     inun_files2 += [each for each in os.listdir(Target) if each.endswith('.wd')]
     inun_files2.sort()
+    
+    # list all the files that are not considered, i.e. LISFLOOD-FP initialisation time- about 2 hrs. Therefore, 8 correponding files need to be deleted (each file 15 min output)
 
 
 
@@ -33,7 +39,7 @@ def data_pre_process():
       'Run8-0000.wd', 'Run8-0001.wd', 'Run8-0002.wd', 'Run8-0003.wd', 'Run8-0004.wd', 'Run8-0005.wd', 'Run8-0006.wd', 'Run8-0007.wd',
       'Run9-0000.wd', 'Run9-0001.wd', 'Run9-0002.wd', 'Run9-0003.wd', 'Run9-0004.wd', 'Run9-0005.wd', 'Run9-0006.wd', 'Run9-0007.wd']
 
-    for i in ls:
+    for i in ls:                    #delete listed files
         inun_files2.remove(i)
 
 
@@ -50,14 +56,19 @@ def data_pre_process():
     Y = np.array(target)
     Y[Y<0.3] = 0
 
+    # Y should now be a 2104 x 581061 array, and target matrix for training process
+    
+    
     ##PROCESS TEST TARGET DATA
-    directory1 = '/home/cvssk/Carlisle_Resubmission/2005Event/Run1/' #(dIRECTORY OF TEST DATA:: 'Run1' for 2005 test data and 'Test2' for 2nd test)
+    directory1 = '/home/cvssk/Carlisle_Resubmission/2005Event/Run1/' #DIRECTORY OF TEST DATA:: 2005 event
     inun_files = []
 
     inun_files += [each for each in os.listdir(directory1) if each.endswith('.wd')]
     inun_files.sort()
+    
 
-
+    # similarly remove first 8 files
+    
     l = ['Run1-0000.wd', 'Run1-0001.wd', 'Run1-0002.wd', 'Run1-0003.wd', 'Run1-0004.wd', 'Run1-0005.wd', 'Run1-0006.wd', 'Run1-0007.wd']
 
     for i in l:
@@ -77,11 +88,16 @@ def data_pre_process():
     Y_test = np.array(test_target)
     Y_test[Y_test<0.3] = 0
     print(Y_test.shape)
-
+    
+    #Y_test should be a 266 x 581061 array for 2005 event
+    
     #########################PREPARE X-PARAM DATA
 
     ####Import Precipitation/Discharge Data
-    data_dir = '/home/cvssk/Carlisle_Resubmission/2005Event/Flows/'
+    data_dir = '/home/cvssk/Carlisle_Resubmission/2005Event/Flows/'   #Directory of upstream flow data directory: Upstream_Flows_Run2.csv, Upstream_Flows_Run3.csv,
+                                                                      #Upstream_Flows_Run4.csv,Upstream_Flows_Run5.csv,Upstream_Flows_Run6.csv,Upstream_Flows_Run7.csv,
+                                                                      #Upstream_Flows_Run8.csv,Upstream_Flows_Run9.csv
+                                                                      #These 8 files should be in this directory.
 
     data =[]
     data += [file for file in os.listdir(data_dir) if file.endswith('.csv')]
@@ -93,7 +109,8 @@ def data_pre_process():
 
     for f in data:
         df = pd.read_csv(data_dir+f)
-        ##Shift the x parameter values back to represent antacedent hydrometeorological values, i.e. t-1, t-2, t-3 etc
+        ##Shift the x parameter values back to represent antacedent hydrometeorological values, i.e. t-1, t-2, t-3 etc to t-8
+        
         df['Upstream1-1'] = df['Upstream1'].shift(1)
         df['Upstream1-2'] = df['Upstream1'].shift(2)
         df['Upstream1-3'] = df['Upstream1'].shift(3)
@@ -231,6 +248,8 @@ import rasterio as rio
 print(tf.__version__)
 
 #%%
+#CNN model for 2005 event modelling
+
 def CNN_Model(x_train, Y, x_test, Y_test, steps, features, outputs):
     '''
     Two layered conv network
@@ -266,6 +285,7 @@ def CNN_Model(x_train, Y, x_test, Y_test, steps, features, outputs):
 
 
 #%%
+#CNN model with Batch normalisation and dropout layers...Used for 2015 event modelling
 def CNN_Model_BN(x_train, Y, x_test, Y_test, steps, features, outputs):
     '''
     Two layered conv network
@@ -312,6 +332,7 @@ def CNN_Model_BN(x_train, Y, x_test, Y_test, steps, features, outputs):
     return model
 
 #%%
+#Additional MLP model for comparison
 
 def MLP_Model(x_train, X_Test, Y, Y_test, features):
     x = x_train.reshape(x_train.shape[0],x_train.shape[2])
@@ -378,9 +399,11 @@ def load_model(name):
   return model
 
 #%%
+#for making predictions
+
 def predict(model,X_Test):
   
-  tar_dir = '/home/cvssk/Carlisle_Resubmission/2005Event/CNN_Outputs/' # change this directory for targets according to model
+  tar_dir = '/home/cvssk/Carlisle_Resubmission/2005Event/CNN_Outputs/' # change this directory for targets according to model..directory for The CNN output files
   data = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Target/Run2-0000.wd') #reference image for fixing raster dimensions
    
   ##Make predictions
@@ -406,7 +429,7 @@ def predict(model,X_Test):
             dst.write(y_pred, 1)
 
 #%%
-##### extract values at the validation points
+##### extract values at the 18 validation points (control points)
 
 def export_ref_data(locations):
   import geopandas as gpd
@@ -417,7 +440,7 @@ def export_ref_data(locations):
   pts.index = range(len(pts))
   coords = [(x,y) for x, y in zip(pts.X, pts.Y)]
 
-  directory1 = '/home/cvssk/Carlisle_Resubmission/2005Event/Test2/' #(dIRECTORY OF TEST DATA:: /Run1 for 2005 event
+  directory1 = '/home/cvssk/Carlisle_Resubmission/2005Event/Run1/' #(dIRECTORY OF TEST DATA:: outputs of LISFLOOD-FP for 2005 event
   inun_files = []
 
   inun_files += [each for each in os.listdir(directory1) if each.endswith('.wd')]
@@ -437,13 +460,14 @@ def export_ref_data(locations):
 
   df = pd.DataFrame(pts)
 
-    ##output dir
+    ##output directory
 
   d = '/home/cvssk/Carlisle_Resubmission/2005Event/CNN_Validation/'
   df.to_csv(d+'LF_2005_Validation'+'.csv')
 
 
-
+#Export CNN predicted depth values for the 18 validation points (contro points
+0
 def export_pred_data(locations):
   import geopandas as gpd
 
@@ -474,48 +498,49 @@ def export_pred_data(locations):
   df.to_csv(d+'CNN_2005_Validation'+'.csv')
 
 
-
+################################
+##Running the models
 
 # %%
 ###################################
-#x_train, Y, x_test, Y_test, steps, features, outputs, X_Test= data_pre_process()
+#Prepare taining and test data
+x_train, Y, x_test, Y_test, steps, features, outputs, X_Test= data_pre_process()
 
 #%%
-#model = CNN_Model(x_train, Y, x_test, Y_test, steps, features, outputs)
+model = CNN_Model(x_train, Y, x_test, Y_test, steps, features, outputs)
 
 #%%
-#name = '/home/cvssk/Carlisle_Resubmission/2005Event/Model/WithBN/CNN_Model_2005'
+name = '/home/cvssk/Carlisle_Resubmission/2005Event/Model/WithBN/CNN_Model_2005'
 
-#save_model(model, name)
-
-#%%
-#model = load_model(name)
-#predict(model, X_Test)
+save_model(model, name)
 
 #%%
-
-#locations = '/home/cvssk/Carlisle_Resubmission/validation_locations/validation_locations_18Points.shp'
-
-#export_ref_data(locations)
+model = load_model(name)
+predict(model, X_Test)
 
 #%%
-#export_pred_data(locations)
+
+locations = '/home/cvssk/Carlisle_Resubmission/validation_locations/validation_locations_18Points.shp'
+
+export_ref_data(locations)
+
+export_pred_data(locations)
 
 
 
 
 # %%
 ####Model with BatchNormalization
-#model = CNN_Model_BN(x_train, Y, x_test, Y_test, steps, features, outputs)
+model = CNN_Model_BN(x_train, Y, x_test, Y_test, steps, features, outputs)
 
 #%%
-#predict(model, X_Test)
+predict(model, X_Test)
 
 #locations = '/home/cvssk/Carlisle_Resubmission/validation_locations/validation_locations_18Points.shp'
-#name = '/home/cvssk/Carlisle_Resubmission/2005Event/Model/CNN_Model_2005'
-#save_model(model, name)
-#export_ref_data(locations)
-#export_pred_data(locations)
+name = '/home/cvssk/Carlisle_Resubmission/2005Event/Model/CNN_Model_2015'
+save_model(model, name)
+export_ref_data(locations)
+export_pred_data(locations)
 
 # %%
 #model = MLP_Model(x_train, X_Test, Y, features)
