@@ -32,7 +32,7 @@ def Target_Data_Cal(locations):
 
 
     ## Train target generation
-    Target = '/home/cvssk/Carlisle_Resubmission/2015Event/Target/'
+    Target = '/home/cvssk/Carlisle_Resubmission/2005Event/Target/'
     inun_files2 = []
 
     ##PROCESS TARGET DATA (Y_PARAM)
@@ -60,7 +60,7 @@ def Target_Data_Cal(locations):
 
     ##output dir
 
-    d = '/home/cvssk/Carlisle_Resubmission/2015Event/SVR/'
+    d = '/home/cvssk/Carlisle_Resubmission/2005Event/SVR/'
     df.to_csv(d+'Y_Train_18pts'+'.csv')
     y_train = df
     return y_train
@@ -68,16 +68,16 @@ def Target_Data_Cal(locations):
 
 
 # %%
-#locations = '/home/cvssk/Carlisle_Resubmission/validation_locations/New_500Samples.shp'
-locations = '/home/cvssk/Carlisle_Resubmission/validation_locations/validation_locations_18Points.shp'
+#locations = '/home/cvssk/Carlisle_Resubmission/validation_locations/New_500Samples.shp'   #this should be used for training models for 500 sampled locations
+locations = '/home/cvssk/Carlisle_Resubmission/validation_locations/validation_locations_18Points.shp'  # this should be used for depth prediction at the 18 control points
 Y_train = Target_Data_Cal(locations)
 
 # %%
 
-Y_train = pd.read_csv('/home/cvssk/Carlisle_Resubmission/2015Event/SVR/Y_Train_18pts.csv')
+Y_train = pd.read_csv('/home/cvssk/Carlisle_Resubmission/2005Event/SVR/Y_Train_18pts.csv')
 
-####Import Precipitation/Discharge Data
-data_dir = '/home/cvssk/Carlisle_Resubmission/2015Event/Flows/'
+####Import Discharge Data
+data_dir = '/home/cvssk/Carlisle_Resubmission/2005Event/Flows/'
 
 data =[]
 data += [file for file in os.listdir(data_dir) if file.endswith('.csv')]
@@ -129,7 +129,7 @@ appended_data = pd.concat(appended_data,ignore_index=True)
 ############Prepare test X_Param
 
 ####Import Precipitation-Discharge Data
-df = pd.read_csv('/home/cvssk/Carlisle_Resubmission/2015Event/Flows/Test/Upstream_Flows_Test2.csv')
+df = pd.read_csv('/home/cvssk/Carlisle_Resubmission/2005Event/Flows/Test/Upstream_Flows_Test2.csv')
 
 
 ##Shift the x parameter values back to represent antacedent hydrometeorological values, i.e. t-1, t-2, t-3 etc
@@ -178,7 +178,7 @@ Y = Y_train.iloc[:,5:]
 cols = list(Y_train.iloc[:,3])
 Y = Y.T
 Y.columns = cols
-Y[Y<0.2] = 0
+Y[Y<0.3] = 0
 
 # %%
 from sklearn.svm import SVR
@@ -197,7 +197,7 @@ for i in Y.columns:
 
     model.fit(X_Train, y)
 
-    #name = '/home/cvssk/Carlisle_Resubmission/2015Event/SVR/models/Model'
+    #name = '/home/cvssk/Carlisle_Resubmission/2005Event/SVR/models/Model'
     #name = name+str(i)
 
     #save_model(model,name)
@@ -215,7 +215,7 @@ df = pd.DataFrame(predicted)
 df[df<0] = 0
 df = df.T
 df.columns = cols
-df.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/SVR/SVR_Outputs/18pts_prediction.csv')
+df.to_csv('/home/cvssk/Carlisle_Resubmission/2005Event/SVR/SVR_Outputs/18pts_prediction.csv')
 
 
 # %%
@@ -240,7 +240,7 @@ df['Elevation'] = pts.Carlisle_5
 
 # %%
 #df['Elevation'] = pts['Elevation']
-df.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/SVR/SVR_Outputs/500Sample_prediction.csv')
+df.to_csv('/home/cvssk/Carlisle_Resubmission/2005Event/SVR/SVR_Outputs/500Sample_prediction.csv')
 
 
 # %%
@@ -256,7 +256,7 @@ from rasterio.plot import show
 
 # %%
 #load SVR predicted water depth
-df = pd.read_csv('/home/cvssk/Carlisle_Resubmission/2015Event/SVR/SVR_Outputs/500Sample_prediction.csv')
+df = pd.read_csv('/home/cvssk/Carlisle_Resubmission/2005Event/SVR/SVR_Outputs/500Sample_prediction.csv')
 df.head()
 
 # %%
@@ -275,14 +275,14 @@ x = x.to_numpy() #2D array of coordinates
 p = sub2['Elevation'].values
 p = p.reshape(p.shape[0], 1)
 
-src = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Carlisle_5m.asc')
+src = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Carlisle_5m.asc')
 
 
 #%%
 #import gridded xyz values for prediction
 #it is possible to extract centroid elevation in Python, however, its much easier
 #to this in R. Therefore, we used R to extract centroid pixel values of the src image 
-grd = pd.read_csv("/home/cvssk/Carlisle_Resubmission/2015Event/SVR/gridded_elevation.csv")
+grd = pd.read_csv("/home/cvssk/Carlisle_Resubmission/2005Event/SVR/gridded_elevation.csv")
 # %%
 
 x_grd = grd.to_numpy()
@@ -322,7 +322,7 @@ with rio.Env():
     # dtype to uint8, and specify LZW compression.
     profile.update(dtype=str(sph.dtype), count=1,compress='lzw')
 
-    with rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/SVR/SVR_Outputs/Rasters/svr_048_500Sample.asc', 'w', **profile) as dst:
+    with rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/SVR/SVR_Outputs/Rasters/svr_048_500Sample.asc', 'w', **profile) as dst:
     #with rio.open(tar_dir+fname+index+'.tif', 'w', **profile) as dst:
         dst.write(np.absolute(sph), 1)
 
