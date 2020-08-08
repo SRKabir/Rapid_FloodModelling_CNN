@@ -1,28 +1,47 @@
-%This is an implementation of Convolutional Neural Network-based rapid fluvial flood modelling system.
+# This is an implementation of Convolutional Neural Network-based rapid fluvial flood modelling system.
 
+This implemention trains on the outputs of a 2D hydraulic model (LISFLOOD-FP). LSIFLOOD-FP is a Bristol University software for inundaiton modelling and can be used freely for research purposes.
+
+To acquire this software please consult http://www.bristol.ac.uk/geography/research/hydrology/models/lisflood/
+
+Once you have the software, you would need to execute it for different boundary conditions.
+
+The supporting LISFLOOD-FP files (.par, .bci, .bdy files are provided in the 'Data' folder)
+
+## Example
+place all LISFLOOD-FP software files and Carlisle_5m.asc, Carlisle.bci, Carlisle_run1.bdy, Carlisle_run1.par files in the same directory.
+cd to the folder from command prompt/terminal. 
+
+Then run the executable file, e.g.,
+
+> lisfloodRelease_double_v631.exe -v Carlisle_run1.par
+
+Run this for all .par files for generating training and testing data.
+
+Outputs from Run2 to Run9 should be placed in the /../Target directory. This is the outputs from synthetic hydrographs and used for training.
+and output files from Run1 should be placed in the /../Run1 directory. This is the outputs of 2005 event and used for testing model performance.
+
+# Training the CNN modeel
 To make sure you have the same libraries please clone/download the repo and 'cd' to directory run the following command:
 
-conda env create -f environment.yml
+> conda env create -f environment.yml
 
 and check that the new environment is available and activate it:
 
-conda info --envs
+> conda info --envs
 
-conda activate bad_env
+> conda activate bad_env
 
 You may have to change some of the directory path in the python files to find the training and target data and output file locations.
 
-The LISFLOOD-FP generated inundation flies could not be uploaded. Therefore, data_pre_process() and data() functions are unusable.
+All required CNN functions are in the 'InunMod_v1.py' file.
 
-The training and testing files are already provided in the Data folder, meaning data data_pre_process() and data() functions are obsolete.
+In the bottom of the script, example is provided.
 
-The CNN training is run on GPU. However, if a CPU is used, training time will be longer.
+Essentially that is the only file required for all CNN opetaions, e.g., data preprocessing, training, predictions etc.
 
-'Carlisle_InunMod.py' contains model functions and 'Depth_Simulations.py' can be used to follow the steps. Note, the training target (.h5) files are large and due to github file limitations couldn't be uploaded at a time. concatenate 'Y_Train_Subset1.h5' and 'Y_Train_Subset2.h5' to make it full. It is already done in 'Depth_Simulations.py'.
+Please note, the currently the codes are not optimized. Therefore, you would need to change the directory names and files. However, necessary comments
+are provided for understanding the codes.
 
-Hyperparameter optimisation scripts are used to find model parameters
-
-Feature_Importance.py script is to rank inputs according to importance.
-
-SVR.py fits Support Vector Regression models to the validation locations.
+Please contact s.r.kabir@lboro.ac.uk for any issues.
 
