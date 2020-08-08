@@ -7,8 +7,8 @@ import pandas as pd
 
 # %%
 
-lf = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PreDef/Run1-0045.wd').read(1)
-cnn = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PreDef/CNN_2005_045.asc').read(1)
+lf = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN_PreDef/Run1-0144.wd').read(1)
+cnn = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN_PreDef/CNN_2005_144.asc').read(1)
 
 lf[lf < 0.3] = 0
 lf[lf != 0] = 1
@@ -41,22 +41,22 @@ classification_acc = pd.DataFrame({'Precision':[precision],
                                 'Recall':[recall],
                                 'F1': [f1]})
 
-classification_acc.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PreDef_45_acc.csv')
+classification_acc.to_csv('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN_PreDef_144_acc.csv')
 
 
 
 # %%
 ###Histogram
 
-cnn45 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/CNN_2015_045.asc')
-cnn76 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/CNN_2015_076.asc')
-cnn124 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/CNN_2015_124.asc')
-cnn220 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/CNN_2015_220.asc')
+cnn45 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/CNN_2005_048.asc')
+cnn76 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/CNN_2005_096.asc')
+cnn124 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/CNN_2005_144.asc')
+cnn220 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/CNN_2005_192.asc')
 
-lf45 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/Run1-0045.wd')
-lf76 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/Run1-0076.wd')
-lf124 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/Run1-0124.wd')
-lf220 = rio.open('/home/cvssk/Carlisle_Resubmission/2015Event/Classification_results/CNN_PostDef/Run1-0220.wd')
+lf45 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/Run1-0048.wd')
+lf76 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/Run1-0096.wd')
+lf124 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/Run1-0144.wd')
+lf220 = rio.open('/home/cvssk/Carlisle_Resubmission/2005Event/Classification_results/CNN/Run1-0192.wd')
 
 
 
@@ -113,23 +113,20 @@ Qls220 = pd.DataFrame({'q1': [Q1.Error], 'q2': [Q2.Error]})
 # %%
 qls = [Qls45,Qls76,Qls124,Qls220]
 QLS = pd.concat(qls)
-QLS.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/Q99.csv')
+QLS.to_csv('/home/cvssk/Carlisle_Resubmission/2005Event/ErrorDist_Results/Q99.csv')
 #df = [dt45['Error'],dt76['Error'],dt124['Error'],dt220['Error']]
-#dt45.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/dt45_q99.csv')
-#dt76.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/dt76_q99.csv')
-#dt124.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/dt124_q99.csv')
-#dt220.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/dt220_q99.csv')
+
 
 #%%
-times = ['10:00 hours December 5 2015', '18:00 hours December 5 2015', '06:00 hours December 6 2015',
-         '06:00 hours December 7 2015']
+times = ['12:00 hours Jan 7 2005', '00:00 hours Jan 8 2005', '12:00 hours Jan 8 2005',
+         '00:00 hours Jan 9 2005']
 
 #%%
 d = pd.DataFrame(df[2]).describe().reset_index()
-d.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/dt124_q99_des_stats.csv')
+d.to_csv('/home/cvssk/Carlisle_Resubmission/2005Event/ErrorDist_Results/dt096_q99_des_stats.csv')
 
 d = pd.DataFrame(dt124.apply(pd.value_counts).reset_index())
-d.to_csv('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/dt124_q99_counts.csv')
+d.to_csv('/home/cvssk/Carlisle_Resubmission/2005Event/ErrorDist_Results/dt144_q99_counts.csv')
 
 #%%
 import matplotlib.pyplot as plt
@@ -174,7 +171,7 @@ plt.ylabel('Count (%)', rotation='vertical',fontsize=13,fontweight='bold')
 fig.tight_layout()
 
 # %%
-fig.savefig('/home/cvssk/Carlisle_Resubmission/2015Event/ErrorDist_Results/ErrorHistogram.png', dpi = 1200)
+fig.savefig('/home/cvssk/Carlisle_Resubmission/2005Event/ErrorDist_Results/ErrorHistogram.png', dpi = 1200)
 
 
 # %%
