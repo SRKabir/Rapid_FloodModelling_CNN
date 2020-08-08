@@ -1,4 +1,4 @@
-This is an implementation of Convolutional Neural Network-based rapid fluvial flood modelling system.
+#This is an implementation of Convolutional Neural Network-based rapid fluvial flood modelling system.
 
 To make sure you have the same libraries please clone/download the repo and 'cd' to directory run the following command:
 
