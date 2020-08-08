@@ -32,7 +32,7 @@ and check that the new environment is available and activate it:
 
 > conda activate bad_env
 
-You may have to change some of the directory path in the python files to find the training and target data and output file locations.
+You may have to change some of the directory paths in the python files to find the training and target data and output file locations.
 
 All required CNN functions are in the 'InunMod_v1.py' file.
 
