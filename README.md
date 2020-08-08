@@ -39,8 +39,9 @@ All required CNN functions are in the 'InunMod_v1.py' file.
 In the bottom of the script, example is provided.
 
 Essentially that is the only file required for all CNN opetaions, e.g., data preprocessing, training, predictions etc.
+Hyperparameter optimisation, input feature importance, plotting, and Support Vector Regression model scripts are also provided
 
-Please note, the currently the codes are not optimized. Therefore, you would need to change the directory names and files. However, necessary comments
+Please note, currently the codes are not optimized. Therefore, you would need to change the directory names and files. However, necessary comments
 are provided for understanding the codes.
 
 Please contact s.r.kabir@lboro.ac.uk for any issues.
