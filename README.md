@@ -44,5 +44,7 @@ Hyperparameter optimisation, input feature importance, plotting, and Support Vec
 Please note, currently the codes are not optimized. Therefore, you would need to change the directory names and files. However, necessary comments
 are provided for understanding the codes.
 
+The codes are constantly updated to help our current research and we intend to release a stable version in the future. 
+
 Please contact s.r.kabir@lboro.ac.uk for any issues.
 
