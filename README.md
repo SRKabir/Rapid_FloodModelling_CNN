@@ -6,7 +6,7 @@ To acquire this software please consult http://www.bristol.ac.uk/geography/resea
 
 Once you have the software, you would need to execute it for different boundary conditions.
 
-The supporting LISFLOOD-FP files (.par, .bci, .bdy files are provided in the 'Data' folder)
+The supporting LISFLOOD-FP files (.asc, .par, .bci, .bdy files are provided in the 'Data' folder)
 
 ## Example
 place all LISFLOOD-FP software files and Carlisle_5m.asc, Carlisle.bci, Carlisle_run1.bdy, Carlisle_run1.par files in the same directory.
