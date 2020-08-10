@@ -18,8 +18,8 @@ Then run the executable file, e.g.,
 
 Run this for all .par files for generating training and testing data.
 
-Outputs from Run2 to Run9 should be placed in the /../Target directory. This is the outputs from synthetic hydrographs and used for training.
-and output files from Run1 should be placed in the /../Run1 directory. This is the outputs of 2005 event and used for testing model performance.
+Outputs from Run2 to Run9 should be placed in the /../Target directory. These are the outputs from synthetic hydrographs and used for training.
+and output files from Run1 should be placed in the /../Run1 directory. These are the outputs of 2005 event and used for testing model performance.
 
 # Training the CNN model
 To make sure you have the same libraries please clone/download the repo and 'cd' to directory run the following command:
