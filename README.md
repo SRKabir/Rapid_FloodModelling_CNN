@@ -46,5 +46,5 @@ are provided for understanding the codes.
 
 The codes are constantly updated to help our current research and we intend to release a stable version in the future. 
 
-Please contact s.r.kabir@lboro.ac.uk for any issues.
+Please contact syed.rezwan.kabir@gmail for any issues.
 
